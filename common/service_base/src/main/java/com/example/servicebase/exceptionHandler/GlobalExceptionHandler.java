@@ -4,10 +4,11 @@ package com.example.servicebase.exceptionHandler;
 
 
 import com.example.commonutils.R;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -18,4 +19,20 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return R.error().message("执行了全局异常处理...");
     }
+
+    @ExceptionHandler(ArithmeticException.class)
+    @ResponseBody
+    public R error(ArithmeticException e) {
+        e.printStackTrace();
+        return R.error().message("执行了ArithmeticException异常处理...");
+    }
+
+    @ExceptionHandler(GuliExceptrion.class)
+    @ResponseBody
+    public R error(GuliExceptrion e) {
+        log.error(e.getMessage());
+        e.printStackTrace();
+        return R.error().code(e.getCode()).message(e.getMsg());
+    }
+
 }

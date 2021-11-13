@@ -4,6 +4,7 @@ package com.example.serviceedu.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.commonutils.R;
+import com.example.servicebase.exceptionHandler.GuliExceptrion;
 import com.example.serviceedu.entity.EduTeacher;
 import com.example.serviceedu.entity.vo.TeacherQuery;
 import com.example.serviceedu.service.EduTeacherService;
@@ -38,8 +39,13 @@ public class EduTeacherController {
     //1.查询讲师所有数据
     @ApiOperation(value = "所有讲师列表")
     @GetMapping("findAll")
-    public R findAllTeacher(){
+    public R findAllTeacher() throws GuliExceptrion {
         List<EduTeacher> list = eduTeacherService.list(null);
+        try {
+            int i=1/0;
+        } catch (Exception e) {
+            throw new GuliExceptrion(20001,"执行自定义异常处理");
+        }
         return R.ok().data("items",list);
     }
 
