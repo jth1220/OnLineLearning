@@ -10,6 +10,7 @@ import com.example.serviceedu.entity.vo.TeacherQuery;
 import com.example.serviceedu.service.EduTeacherService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ import java.util.List;
 @Api(tags = "讲师管理")
 @RestController
 @RequestMapping("/serviceedu/edu-teacher")
+@CrossOrigin
 public class EduTeacherController {
 
     //注入service
@@ -41,11 +43,6 @@ public class EduTeacherController {
     @GetMapping("findAll")
     public R findAllTeacher() throws GuliExceptrion {
         List<EduTeacher> list = eduTeacherService.list(null);
-        try {
-            int i=1/0;
-        } catch (Exception e) {
-            throw new GuliExceptrion(20001,"执行自定义异常处理");
-        }
         return R.ok().data("items",list);
     }
 
@@ -79,7 +76,7 @@ public class EduTeacherController {
                                   @PathVariable long limit,
                                   @RequestBody(required = false) TeacherQuery teacherQuery){
         // 创建配置对象
-        Page<EduTeacher> pageTeacher=new Page<>(1,3);
+        Page<EduTeacher> pageTeacher=new Page<>(current,limit);
         // 构建条件,判断条件是否为空 不为空则拼接
         String name = teacherQuery.getName();
         Integer level = teacherQuery.getLevel();
@@ -98,6 +95,7 @@ public class EduTeacherController {
         if (!StringUtils.isEmpty(end)) {
             queryWrapper.le("gmt_create", end);
         }
+        queryWrapper.orderByDesc("gmt_create");
         eduTeacherService.page(pageTeacher, queryWrapper);
         long total=pageTeacher.getTotal();
         List<EduTeacher> list=pageTeacher.getRecords();
