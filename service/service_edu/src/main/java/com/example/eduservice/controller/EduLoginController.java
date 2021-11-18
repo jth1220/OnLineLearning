@@ -1,4 +1,4 @@
-package com.example.serviceedu.controller;
+package com.example.eduservice.controller;
 
 import com.example.commonutils.R;
 import org.springframework.web.bind.annotation.*;

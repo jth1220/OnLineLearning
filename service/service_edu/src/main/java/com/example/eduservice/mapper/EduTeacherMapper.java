@@ -1,6 +1,6 @@
-package com.example.serviceedu.mapper;
+package com.example.eduservice.mapper;
 
-import com.example.serviceedu.entity.EduTeacher;
+import com.example.eduservice.entity.EduTeacher;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
