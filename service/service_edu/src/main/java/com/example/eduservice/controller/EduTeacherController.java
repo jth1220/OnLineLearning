@@ -36,7 +36,7 @@ public class EduTeacherController {
 
     //1.查询讲师所有数据
     @ApiOperation(value = "所有讲师列表")
-    @GetMapping(" ")
+    @GetMapping("findAll")
     public R findAllTeacher() throws GuliExceptrion {
         List<EduTeacher> list = eduTeacherService.list(null);
         return R.ok().data("items",list);
