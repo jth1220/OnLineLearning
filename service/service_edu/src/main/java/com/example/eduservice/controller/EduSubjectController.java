@@ -2,15 +2,15 @@ package com.example.eduservice.controller;
 
 
 import com.example.commonutils.R;
+import com.example.eduservice.entity.subject.OneSubject;
 import com.example.eduservice.service.EduSubjectService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -32,9 +32,16 @@ public class EduSubjectController {
     //添加课程分类
     //获取到上传过来的文件，将文件中的内容读取出来
     @PostMapping("addSubject")
-    public R addSubject(MultipartFile multipartFile){
-        subjectService.saveSubject(multipartFile,subjectService);
+    public R addSubject(MultipartFile file){
+        subjectService.saveSubject(file,subjectService);
         return R.ok();
+    }
+
+    //课程分类列表
+    @GetMapping("getAllSubject")
+    public R getAllSubject(){
+        List<OneSubject> list=subjectService.getAllOneTwoSubject();
+        return R.ok().data("list",list);
     }
 }
 
