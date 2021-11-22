@@ -1,14 +1,17 @@
 package com.example.eduservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.commonutils.R;
 import com.example.eduservice.entity.EduCourse;
 import com.example.eduservice.entity.EduCourseDescription;
 import com.example.eduservice.entity.vo.CourseInfoVo;
 import com.example.eduservice.entity.vo.CoursePublishVo;
 import com.example.eduservice.mapper.EduCourseMapper;
+import com.example.eduservice.service.EduChapterService;
 import com.example.eduservice.service.EduCourseDescriptionService;
 import com.example.eduservice.service.EduCourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.eduservice.service.EduVideoService;
 import com.example.servicebase.exceptionHandler.GuliExceptrion;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,12 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
     @Autowired
     private EduCourseDescriptionService eduCourseDescriptionService;
+
+    @Autowired
+    private EduVideoService eduVideoService;
+
+    @Autowired
+    private EduChapterService eduChapterService;
 
     @Override
     public String saveCourseInfo(CourseInfoVo courseInfoVo) {
@@ -87,5 +96,24 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         //调用mapper
         CoursePublishVo coursePublishVo = baseMapper.getPublishCourseInfo(id);
         return coursePublishVo;
+    }
+    //删除课程
+    @Override
+    public void removeCourse(String courseId) {
+        //1.根据课程id删除小节
+        eduVideoService.removeVideoByCourseId(courseId);
+        //2.根据课程id删除章节
+        eduChapterService.removeChapterByCourseId(courseId);
+        //3.根据课程id删除描述
+        eduCourseDescriptionService.removeById(courseId);
+        //4.根据课程id删除课程本身
+        int i = baseMapper.deleteById(courseId);
+        if(i==0){
+            try {
+                throw new GuliExceptrion(20001,"删除失败");
+            } catch (GuliExceptrion guliExceptrion) {
+                guliExceptrion.printStackTrace();
+            }
+        }
     }
 }
