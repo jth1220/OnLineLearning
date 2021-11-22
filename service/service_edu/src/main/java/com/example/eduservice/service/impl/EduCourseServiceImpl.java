@@ -1,8 +1,10 @@
 package com.example.eduservice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.eduservice.entity.EduCourse;
 import com.example.eduservice.entity.EduCourseDescription;
 import com.example.eduservice.entity.vo.CourseInfoVo;
+import com.example.eduservice.entity.vo.CoursePublishVo;
 import com.example.eduservice.mapper.EduCourseMapper;
 import com.example.eduservice.service.EduCourseDescriptionService;
 import com.example.eduservice.service.EduCourseService;
@@ -46,5 +48,44 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         eduCourseDescriptionService.save(courseDescription);
 
         return cid;
+    }
+
+    @Override
+    public CourseInfoVo getCourseInfo(String courseId) {
+        //查询课程表
+        EduCourse eduCourse = baseMapper.selectById(courseId);
+        CourseInfoVo courseInfoVo=new CourseInfoVo();
+        BeanUtils.copyProperties(eduCourse,courseInfoVo);
+        //查询描述表
+        EduCourseDescription courseDescription = eduCourseDescriptionService.getById(courseId);
+        courseInfoVo.setDescription(courseDescription.getDescription());
+        return courseInfoVo;
+    }
+
+    @Override
+    public void updateCourseInfo(CourseInfoVo courseInfoVo) {
+        //修改课程表
+        EduCourse eduCourse=new EduCourse();
+        BeanUtils.copyProperties(courseInfoVo,eduCourse);
+        int update=baseMapper.updateById(eduCourse);
+        if(update==0){
+            try {
+                throw new GuliExceptrion(20001,"修改课程信息失败");
+            } catch (GuliExceptrion guliExceptrion) {
+                guliExceptrion.printStackTrace();
+            }
+        }
+        //修改描述表
+        EduCourseDescription courseDescription = new EduCourseDescription();
+        courseDescription.setId(courseInfoVo.getId());
+        courseDescription.setDescription(courseInfoVo.getDescription());
+        eduCourseDescriptionService.updateById(courseDescription);
+    }
+
+    @Override
+    public CoursePublishVo publishCourseInfo(String id) {
+        //调用mapper
+        CoursePublishVo coursePublishVo = baseMapper.getPublishCourseInfo(id);
+        return coursePublishVo;
     }
 }
