@@ -73,12 +73,15 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         if(count>0){
             try {
                 throw new GuliExceptrion(20001,"有小节，不能删除");
+
             } catch (GuliExceptrion guliExceptrion) {
                 guliExceptrion.printStackTrace();
             }
+        }else{
+            int result=baseMapper.deleteById(chapterId);
+            return result>0;
         }
-        int result=baseMapper.deleteById(chapterId);
-        return result>0;
+        return false;
     }
 
     //根据课程id删除章节
