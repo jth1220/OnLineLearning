@@ -7,4 +7,5 @@ import net.bytebuddy.implementation.bytecode.assign.primitive.PrimitiveBoxingDel
 public class VideoVo {
     private String id;
     private String title;
+    private String videoSourceId;
 }

@@ -102,11 +102,10 @@ public class WxApiController {
                 ConstantWxUtils.WX_OPEN_APP_ID,
                 redirectUrl,
                 "atguigu");
-
-
-
         //重定向到请求微信地址
         return "redirect:"+url;
 
     }
+
+
 }

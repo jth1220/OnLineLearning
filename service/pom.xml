@@ -17,6 +17,8 @@
         <module>service-acl</module>
         <module>service-msm</module>
         <module>service-ucenter</module>
+        <module>service-order</module>
+        <module>service-order</module>
     </modules>
 
     <artifactId>service</artifactId>

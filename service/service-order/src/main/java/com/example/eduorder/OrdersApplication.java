@@ -1,4 +1,4 @@
-package com.example.educenter;
+package com.example.eduorder;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -10,12 +10,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@EnableDiscoveryClient
 @ComponentScan(basePackages = {"com.example"})
-@MapperScan("com.example.educenter.mapper")
+@MapperScan("com.example.eduorder.mapper")
+@EnableDiscoveryClient
 @EnableFeignClients
-public class EduCenterApplication {
+public class OrdersApplication {
     public static void main(String[] args) {
-        SpringApplication.run(EduCenterApplication.class,args);
+        SpringApplication.run(OrdersApplication.class,args);
     }
 }

@@ -3,10 +3,13 @@ package com.example.vod.controller;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoResponse;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse;
 import com.example.commonutils.R;
 import com.example.servicebase.exceptionHandler.GuliExceptrion;
 import com.example.vod.service.VodService;
 import com.example.vod.utils.ConstantVodUtils;
+import com.example.vod.utils.InitVodClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,7 @@ import static com.example.vod.utils.InitVodClient.initVodClient;
 @RequestMapping("/eduvod/video")
 @CrossOrigin
 public class VodController {
+
     @Autowired
     private VodService vodService;
 
@@ -53,5 +57,28 @@ public class VodController {
     public R deleteBatch(@RequestParam("videoIdList") List videoIdList){
         vodService.removeMoreAlyVideo(videoIdList);
         return R.ok();
+    }
+
+    //根据视频id获取视频播放凭证
+    @GetMapping("getPlayAuth/{id}")
+    public R getPlayAuth(@PathVariable String id){
+        String vid=id;
+        try{
+            DefaultAcsClient client = initVodClient(ConstantVodUtils.ACCESS_KEY_ID, ConstantVodUtils.ACCESS_KEY_SECRET);
+            //创建获取凭证的request和response
+            GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+            //向request中设置视频id
+            request.setVideoId(vid);
+            GetVideoPlayAuthResponse response = client.getAcsResponse(request);
+            String playAuth = response.getPlayAuth();
+            return R.ok().data("playAuth",playAuth);
+        }catch (Exception e){
+            try {
+                throw new GuliExceptrion(20001,"获取凭证失败");
+            } catch (GuliExceptrion guliExceptrion) {
+                guliExceptrion.printStackTrace();
+            }
+        }
+        return R.error();
     }
 }
