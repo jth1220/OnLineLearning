@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 2021-11-28
  */
 @RestController
-@RequestMapping("/edeorder/paylog")
+@RequestMapping("/eduorder/paylog")
 @CrossOrigin
 public class PayLogController {
 
